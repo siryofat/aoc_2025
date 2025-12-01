@@ -1,0 +1,17 @@
+[project]
+name = "advent-of-code-2025"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "sirYofat", email = "siryofat@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+advent-of-code-2025 = "advent_of_code_2025:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
