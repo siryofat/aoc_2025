@@ -30,4 +30,38 @@ def day06_01(line_generator: Generator[str]) -> int:
     return np.sum(res)
 
 
-print(day06_01(extract_lines(file)))
+def day06_02(line_generator: Generator[str]) -> int:
+    matrix = []
+    for line in line_generator:
+        cur = []
+        for char in line:
+            cur.append(char)
+        matrix.append(cur)
+
+    ops = matrix.pop()
+    ops = [op for op in ops if op in {"+", "*"}]
+
+    values = []
+    nums = []
+    for i in range(len(matrix[0])):
+        num = ""
+        for row in matrix:
+            num += str(row[i])
+        num = num.strip()
+        if num == "":
+            values.append(nums.copy())
+            nums.clear()
+            continue
+        nums.append(int(num))
+
+    reducers = {"+": np.sum, "*": np.prod}
+
+    res = []
+    for i, op in enumerate(ops):
+        res.append(reducers[op](values[i]))
+
+    return np.sum(res)
+
+
+# print(day06_01(extract_lines(file)))
+print(day06_02(extract_lines(file)))
