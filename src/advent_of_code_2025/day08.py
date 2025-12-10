@@ -1,6 +1,5 @@
 import math
 from collections.abc import Generator
-from functools import reduce
 from pathlib import Path
 
 cwd = Path(__file__).parent
@@ -26,28 +25,33 @@ for point in extract_points(file):
 distances.sort(key=lambda x: x[0])
 
 circuits = []
-connections = 1000
+last = set()
+connections = len(distances)
 for i in range(connections):
     _, i_p1, i_p2 = distances[i]
     merge = []
-
+    connected = False
     for c, circuit in enumerate(circuits):
         if i_p1 in circuit and i_p2 in circuit:
+            connected = True
             break
         if i_p1 in circuit or i_p2 in circuit:
             merge.append(c)
-
     if merge:
         to_merge = [circuits[x] for x in merge]
         circuits = [circuit for i, circuit in enumerate(circuits) if i not in merge]
         merged = {i_p1, i_p2}
         merged.update(*to_merge)
         circuits.append(merged)
+        last = {i_p1, i_p2}
+    elif connected:
+        continue
     else:
+        last = {i_p1, i_p2}
         circuits.append({i_p1, i_p2})
 
-circuits.sort(key=lambda x: len(x), reverse=True)
-firsts = circuits[:3]
-print(math.prod(len(cir) for cir in firsts))
 
-# 2548 too low
+p1, p2 = last
+x1 = points[p1][0]
+x2 = points[p2][0]
+print(f"{x1=}, {x2=}, {x1*x2=}")
