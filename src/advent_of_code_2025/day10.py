@@ -83,4 +83,38 @@ def day10_01(file):
     return total
 
 
-print(day10_01(file))
+def day10_02(file):
+    total = 0
+    for line in extract_lines(file):
+        _, buttons, joltage = line
+        btn_list = [to_tuple(btns) for btns in buttons.split()]
+        joltage = tuple(map(int, joltage.split(",")))
+        start = (0,) * len(joltage)
+        depth = 0
+        seen = set()
+        q = deque()
+        q.append((start, depth))
+
+        while q:
+            prev, depth = q.popleft()
+            if prev in seen:
+                continue
+            else:
+                seen.add(prev)
+
+            if prev == joltage:
+                total += depth
+                break
+
+            depth += 1
+            for btn in btn_list:
+                nxt_state = tuple(
+                    [x + 1 if i in btn else x for i, x in enumerate(prev)]
+                )
+                q.append((nxt_state, depth))
+
+    return total
+
+
+# print(day10_01(file))
+print(day10_02(file))

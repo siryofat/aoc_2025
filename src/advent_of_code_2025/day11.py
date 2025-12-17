@@ -45,4 +45,40 @@ def day11_01(file):
     return total
 
 
+def day11_02(file):
+    tree = {}
+    for line in extract_points(file):
+        dev, conn = line
+        conns = conn.split() if isinstance(conn.split(), list) else [conn]
+        tree[dev] = conns
+
+    q = deque()
+    for con in tree["svr"]:
+        q.append([con])
+
+    total = 0
+
+    seen = set()
+
+    while q:
+        path = q.popleft()
+        con = path[-1]
+
+        if con == "out":
+            if "dac" in path and "fft" in path:
+                total += 1
+            continue
+
+        if con in seen:
+            if "dac" in path and "fft" in path:
+                total += 1
+                continue
+
+        for nxt in tree[con]:
+            q.append(path + [nxt])
+
+    return total
+
+
 print(day11_01(file))
+print(day11_02(file))
